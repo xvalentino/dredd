@@ -120,14 +120,14 @@ complete: Tests took 16ms
 
 <ol>
 <li>
-<p>Find an action name:</p>
+<p>Find name of action which you want to wrap with a hook:</p>
 
 <pre><code>$ dredd ./apiary.apib http://localhost:3000 --names | grep Retreive
 info: Gist &gt; Gist &gt; Retrieve a Single Gist
 </code></pre>
 </li>
 <li>
-<p>Create a before hook file in <code>hooks/hookfile.coffee</code>:</p>
+<p>Create a hook file in <code>hooks/hookfile.coffee</code>:</p>
 
 <pre><code>{before, after} = require 'hooks'
 
@@ -144,7 +144,7 @@ before "Gist &gt; Gist &gt; Retrieve a Single Gist", (transaction) -&gt;
 </code></pre>
 </li>
 <li>
-<p>Enable hooks in command line</p>
+<p>Let Dredd know about hooks</p>
 
 <pre><code>$ dredd apiary.apib http://localhost:3000/ --hookfiles=hooks/*
 info: Found Hookfiles: hooks/hooks.coffee
