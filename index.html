@@ -54,13 +54,23 @@
 </code></pre>
 
 <h2>
-<a name="get-started-testing-your-api" class="anchor" href="#get-started-testing-your-api"><span class="octicon octicon-link"></span></a>Get Started Testing Your API</h2>
+<a name="get-started-validating-your-api-documentation" class="anchor" href="#get-started-validating-your-api-documentation"><span class="octicon octicon-link"></span></a>Get Started Validating Your API Documentation</h2>
 
-<pre><code>$ dredd blueprint.md http://api.myservice.tld
+<pre><code>$ cat &gt; apiary.apib &lt;&lt;EOF
+# GET /message
++ Response 200 (text/plain)
+
+      Hello World!
+EOF
+$ dredd blueprint.md http://localhost:3000
+info: Beginning Dredd testing...
+pass: GET /message duration: 9ms
+complete: 1 passing, 0 failing, 0 errors, 0 skipped
+complete: Tests took 16ms
 </code></pre>
 
 <h2>
-<a name="continous-integration" class="anchor" href="#continous-integration"><span class="octicon octicon-link"></span></a>Continous integration</h2>
+<a name="continous-integration" class="anchor" href="#continous-integration"><span class="octicon octicon-link"></span></a>Continous Integration</h2>
 
 <p>With Dredd you can easily plug your API documentation into the Continous Integration system like <a href="https://travis-ci.org/">Travis CI</a> or <a href="http://jenkins-ci.org/">Jenkins</a> and have API documentation up-to-date, all the time. </p>
 
