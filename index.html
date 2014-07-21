@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Dredd : No more outdated API documentation" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Dredd</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/apiaryio/dredd">View on GitHub</a>
+
+          <h1 id="project_title">Dredd</h1>
+          <h2 id="project_tagline">No more outdated API documentation</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/apiaryio/dredd/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/apiaryio/dredd/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="dreddapi-blueprint-testing-tool" class="anchor" href="#dreddapi-blueprint-testing-tool"><span class="octicon octicon-link"></span></a>Dredd—API Blueprint Testing Tool</h1>
+
+<p><a href="https://travis-ci.org/apiaryio/dredd"><img src="https://travis-ci.org/apiaryio/dredd.png?branch=master" alt="Build Status"></a>
+<a href="https://david-dm.org/apiaryio/dredd"><img src="https://david-dm.org/apiaryio/dredd.png" alt="Dependency Status"></a>
+<a href="https://david-dm.org/apiaryio/dredd#info=devDependencies"><img src="https://david-dm.org/apiaryio/dredd/dev-status.png" alt="devDependency Status"></a>
+<a href="https://coveralls.io/r/apiaryio/dredd?branch=master"><img src="https://coveralls.io/repos/apiaryio/dredd/badge.png?branch=master" alt="Coverage Status"></a></p>
+
+<p><a href="https://nodei.co/npm/dredd/"><img src="https://nodei.co/npm/dredd.png" alt="NPM"></a></p>
+
+<p>Dredd is a command-line tool for validating API documentation written in <a href="http://apiblueprint.org/">API Blueprint</a> format against its backend implementation built on top of <a href="https://github.com/apiaryio/gavel.js">Gavel</a> HTTP validation library.</p>
+
+<p><img src="https://raw.github.com/apiaryio/dredd/master/img/Dredd.png" alt="Dredd API Blueprint testing tool"></p>
+
+<h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p><a href="https://npmjs.org/">Node.js</a> and <a href="https://npmjs.org/">NPM</a> is required.</p>
+
+<pre><code>$ npm install -g dredd
+</code></pre>
+
+<h2>
+<a name="get-started-testing-your-api" class="anchor" href="#get-started-testing-your-api"><span class="octicon octicon-link"></span></a>Get Started Testing Your API</h2>
+
+<pre><code>$ dredd blueprint.md http://api.myservice.tld
+</code></pre>
+
+<h2>
+<a name="continous-integration" class="anchor" href="#continous-integration"><span class="octicon octicon-link"></span></a>Continous integration</h2>
+
+<p>With Dredd you can easily plug your API documentation into the Continous Integration system like <a href="https://travis-ci.org/">Travis CI</a> or <a href="http://jenkins-ci.org/">Jenkins</a> and have API documentation up-to-date, all the time. </p>
+
+<h1>
+<a name="validating-real-life-api" class="anchor" href="#validating-real-life-api"><span class="octicon octicon-link"></span></a>Validating real-life API</h1>
+
+<p>See <a href="https://github.com/apiaryio/dredd-example">dredd-example</a> repo for example application.</p>
+
+<p>In previous post we <a href="http://blog.apiary.io/2013/10/10/No-more-outdated-API-documentation/">introduced Dredd</a> and <a href="http://blog.apiary.io/2013/10/17/How-to-test-api-with-api-blueprint-and-dredd/">the tutorial</a> how you can test your API blueprints with Dredd and make them a part of your project's testing harness in the continous integration. The benefit of this approach is <strong>always valid API documentation</strong>. I'd like to show here more practical example how to test an already existing API documentation and which catches you can face to.</p>
+
+<h2>
+<a name="examples-for-uri-parameters" class="anchor" href="#examples-for-uri-parameters"><span class="octicon octicon-link"></span></a>Examples for URI Parameters</h2>
+
+<p>First of all make sure that resources specified by an URI template in the blueprint have specified an example value for each URI parameter in resource's <a href="https://github.com/apiaryio/api-blueprint/blob/master/API%20Blueprint%20Specification.md#def-uriparameters-section">parameters section</a>:</p>
+
+<pre><code>## Gist [/gists/{id}]
+
++ Parameters
+    + id (required,`42`) ... ID of the Gist in the form of a hash.
+</code></pre>
+
+<p>Resources defined with URI template without specified parameter example value are considered as ambigous. You can check it simply by running <code>dredd --names apiary.apib</code></p>
+
+<h2>
+<a name="resource-lifecycle" class="anchor" href="#resource-lifecycle"><span class="octicon octicon-link"></span></a>Resource lifecycle</h2>
+
+<p>Not all bleuprints are written as scenario oriented. It means that order of resources declaration in the blueprint shall not respect entity's lifecycle. For example retreiving a collection of Gists before creating it.</p>
+
+<p>If your API maintain complete entity lifecycle under one single URI endpoint, you can use <code>--sort</code> switch and Dredd will automatically sort resource actions starting with <code>POST</code> and ending with <code>DELETE</code>. Otherwise if the entity lifecycle is split into more URI endpoints (collections and members for example) you have to use Hooks and fixtures for each action to setup and teardown testable situation.</p>
+
+<h2>
+<a name="using-hooks-and-fixtures" class="anchor" href="#using-hooks-and-fixtures"><span class="octicon octicon-link"></span></a>Using Hooks and Fixtures</h2>
+
+<p>Using </p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Dredd maintained by <a href="https://github.com/apiaryio">apiaryio</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
