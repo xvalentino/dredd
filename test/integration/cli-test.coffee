@@ -14,7 +14,7 @@ stdout = ''
 exitStatus = null
 requests = []
 
-binDredd = path.normalize(path.join __dirname, '../../bin/dredd')
+binDredd = 'node ' + path.normalize(path.join __dirname, '../../bin/dredd')
 
 execCommand = (cmd, options = {}, callback) ->
   stderr = ''
@@ -23,7 +23,9 @@ execCommand = (cmd, options = {}, callback) ->
 
   if typeof options is 'function'
     callback = options
-    options = undefined
+    options = {}
+
+  options.cwd = path.normalize path.join __dirname, '../..'
 
   cli = exec CMD_PREFIX + cmd, options, (error, out, err) ->
     stdout = out

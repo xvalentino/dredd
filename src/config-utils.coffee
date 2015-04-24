@@ -5,8 +5,8 @@ path = require 'path'
 
 configUtils = {}
 
-configUtils.save = (argsOrigin, path) ->
-  path ?= path.normalize path.join __dirname, './dredd.yml'
+configUtils.save = (argsOrigin, dreddYmlFilePath) ->
+  dreddYmlFilePath ?= path.normalize path.join(__dirname, '../dredd.yml')
 
   args = clone argsOrigin
 
@@ -20,13 +20,13 @@ configUtils.save = (argsOrigin, path) ->
   delete args['_']
 
   yamlArgs = yaml.dump args
-  fs.writeFileSync path, yamlArgs
+  fs.writeFileSync dreddYmlFilePath, yamlArgs
 
 
-configUtils.load = (path) ->
-  path ?= path.normalize path.join __dirname, './dredd.yml'
+configUtils.load = (dreddYmlFilePath) ->
+  dreddYmlFilePath ?= path.normalize path.join(__dirname, '../dredd.yml')
 
-  yamlData = fs.readFileSync path
+  yamlData = fs.readFileSync dreddYmlFilePath
   data = yaml.safeLoad yamlData
 
   data['_'] = [data['blueprint'], data['endpoint']]

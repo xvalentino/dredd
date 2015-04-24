@@ -2,6 +2,7 @@
 proxyquire = require 'proxyquire'
 sinon = require 'sinon'
 clone = require 'clone'
+path = require 'path'
 
 fsStub = require 'fs'
 
@@ -60,7 +61,7 @@ argvData =
   q: false
   path: []
   p: []
-  '$0': 'node ./bin/dredd'
+  '$0': "node #{path.normalize path.join(__dirname, '../../bin/dredd')}"
 
 describe 'configUtils', () ->
   argv = null
@@ -133,11 +134,11 @@ describe 'configUtils', () ->
 
     describe 'when path is given', () ->
       it 'should save to that path', () ->
-        path = 'some-other-location.yml '
-        configUtils.save argv, path
+        otherPath = 'some-other-location.yml '
+        configUtils.save argv, otherPath
         call = fsStub.writeFileSync.getCall(0)
         args = call.args
-        assert.include args[0], path
+        assert.include args[0], otherPath
 
   describe 'load(path)', () ->
 
@@ -187,11 +188,11 @@ describe 'configUtils', () ->
 
     describe 'when path is given', () ->
       it 'should load from that path', () ->
-        path = 'some-other-location.yml '
-        configUtils.load path
+        otherPath = 'some-other-location.yml '
+        configUtils.load otherPath
         call = fsStub.readFileSync.getCall(0)
         args = call.args
-        assert.include args[0], path
+        assert.include args[0], otherPath
 
     it 'should move blueprint and enpoint to an array under _ key', () ->
       output = configUtils.load()

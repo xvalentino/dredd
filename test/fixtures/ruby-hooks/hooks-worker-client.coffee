@@ -8,7 +8,7 @@ HOOK_TIMEOUT = 5000
 WORKER_HOST = 'localhost'
 WORKER_PORT = 61321
 WORKER_MESSAGE_DELIMITER = "\n"
-WORKER_COMMAND = 'ruby ' + path.normalize(path.join __dirname, './test/fixtures/ruby-hooks/dredd-worker.rb')
+WORKER_COMMAND = 'ruby ' + path.normalize(path.join __dirname, '../../fixtures/ruby-hooks/dredd-worker.rb')
 
 emitter = new EventEmitter
 

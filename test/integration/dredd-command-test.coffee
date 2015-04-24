@@ -90,7 +90,7 @@ describe "DreddCommand class Integration", () ->
       app.get '/', (req, res) -> res.sendStatus 404
 
       app.get '/file.apib', (req, res) ->
-        stream = fs.createReadStream(path.normalize path.join __dirname, './test/fixtures/single-get.apib')
+        stream = fs.createReadStream(path.normalize path.join __dirname, '../fixtures/single-get.apib')
         stream.pipe res.type('text')
 
       app.get '/machines', (req, res) ->

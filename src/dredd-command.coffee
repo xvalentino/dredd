@@ -130,7 +130,7 @@ class DreddCommand
       return @_processExit(0)
 
   loadDreddFile: () ->
-    if fs.existsSync path.normalize(path.join __dirname, './dredd.yml')
+    if fs.existsSync path.normalize(path.join __dirname, '../dredd.yml')
       console.log 'Configuration dredd.yml found, ignoring other arguments.'
       @argv = configUtils.load()
 
