@@ -1,2 +1,2 @@
 #!/bin/sh
-find ./test/ -name '*-test.coffee' | xargs ./node_modules/mocha/bin/mocha -w --reporter spec --compilers 'coffee:coffee-script/register'
+./node_modules/mocha/bin/mocha -w --reporter spec --compilers 'coffee:coffee-script/register' --recursive 'test/**/*-test.coffee'

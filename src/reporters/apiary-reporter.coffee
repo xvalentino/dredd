@@ -101,7 +101,7 @@ class ApiaryReporter
           logger.error error
           callback()
         else
-          @remoteId = parsedBody['_id']
+          @remoteId = parsedBody['uuid'] or parsedBody['_id']
           @reportUrl = parsedBody['reportUrl'] if parsedBody['reportUrl']
 
           callback()

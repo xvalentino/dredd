@@ -1,3 +1,4 @@
+path = require 'path'
 {Pitboss} = require 'pitboss-ng'
 Hooks = require './hooks'
 
@@ -26,7 +27,7 @@ sandboxHooksCode = (hooksCode, callback) ->
   """
 
   sandbox = new Pitboss(wrappedCode)
-  sandbox.run {libraries: {"_Hooks": '../../../lib/hooks', "console", "console"}}, (err, result) ->
+  sandbox.run {libraries: {"_Hooks": path.normalize(path.join __dirname, './hooks'), "console", "console"}}, (err, result) ->
     sandbox.kill()
     return callback err if err
     callback(undefined, result)

@@ -7,9 +7,14 @@
     "dredd": "bin/dredd"
   },
   "scripts": {
-    "pretest": "coffeelint ./src",
-    "test": "scripts/test",
-    "prepublish": "scripts/prepublish"
+    "compile": "gulp build",
+    "mocha": "scripts/mocha",
+    "bdd": "scripts/bdd",
+    "lint": "gulp lint",
+    "pretest": "gulp lint",
+    "test": "gulp test",
+    "coveralls": "scripts/coveralls",
+    "prepublish": "gulp prepublish"
   },
   "repository": {
     "type": "git",
@@ -44,9 +49,13 @@
     "codo": "^2.0.11",
     "coffee-coverage": "~0.4.5",
     "coffee-errors": "~0.8.6",
-    "coffeelint": "^1.9.2",
     "coveralls": "~2.11.2",
     "express": "^4.12.1",
+    "gulp": "^3.8.11",
+    "gulp-coffee": "^2.3.1",
+    "gulp-coffeelint": "^0.4.0",
+    "gulp-mocha": "^2.0.1",
+    "gulp-util": "^3.0.4",
     "jscoverage": "~0.5.9",
     "mocha": "^2.1.0",
     "mocha-lcov-reporter": "0.0.2",

@@ -22,4 +22,4 @@ notifications:
     format: html
 
 after_success:
-  - ./scripts/coveralls
+  - npm run coveralls

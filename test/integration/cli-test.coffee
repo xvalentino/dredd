@@ -1,4 +1,5 @@
 {assert} = require('chai')
+path = require 'path'
 {exec} = require('child_process')
 express = require 'express'
 clone = require 'clone'
@@ -12,6 +13,8 @@ stderr = ''
 stdout = ''
 exitStatus = null
 requests = []
+
+binDredd = path.normalize(path.join __dirname, '../../bin/dredd')
 
 execCommand = (cmd, options = {}, callback) ->
   stderr = ''
@@ -38,7 +41,7 @@ describe "Command line interface", () ->
 
   describe "When blueprint file not found", ->
     before (done) ->
-      cmd = "./bin/dredd ./test/fixtures/nonexistent_path.md http://localhost:#{PORT}"
+      cmd = "#{binDredd} ./test/fixtures/nonexistent_path.md http://localhost:#{PORT}"
 
       execCommand cmd, done
 
@@ -56,9 +59,9 @@ describe "Command line interface", () ->
     notFound = null
     fileFound = null
 
-    errorCmd = "./bin/dredd http://localhost:#{PORT+1}/connection-error.apib http://localhost:#{PORT+1}"
-    wrongCmd = "./bin/dredd http://localhost:#{PORT}/not-found.apib http://localhost:#{PORT}"
-    goodCmd = "./bin/dredd http://localhost:#{PORT}/file.apib http://localhost:#{PORT}"
+    errorCmd = "#{binDredd} http://localhost:#{PORT+1}/connection-error.apib http://localhost:#{PORT+1}"
+    wrongCmd = "#{binDredd} http://localhost:#{PORT}/not-found.apib http://localhost:#{PORT}"
+    goodCmd = "#{binDredd} http://localhost:#{PORT}/file.apib http://localhost:#{PORT}"
 
     afterEach ->
       connectedToServer = null
@@ -76,7 +79,7 @@ describe "Command line interface", () ->
       app.get '/file.apib', (req, res) ->
         fileFound = true
         res.type('text')
-        stream = fs.createReadStream './test/fixtures/single-get.apib'
+        stream = fs.createReadStream path.normalize(path.join __dirname, '../fixtures/single-get.apib')
         stream.pipe res
 
       app.get '/machines', (req, res) ->
@@ -160,7 +163,7 @@ describe "Command line interface", () ->
     describe "when executing the command and the server is responding as specified in the blueprint", () ->
 
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT}"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT}"
 
         app = express()
 
@@ -183,7 +186,7 @@ describe "Command line interface", () ->
 
     describe "when executing the command and the server is responding as specified in the blueprint, endpoint with path", () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT}/v2/"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT}/v2/"
 
         app = express()
 
@@ -206,7 +209,7 @@ describe "Command line interface", () ->
 
     describe "when executing the command and the server is sending different response", () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT}"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT}"
 
         app = express()
 
@@ -234,7 +237,7 @@ describe "Command line interface", () ->
       receivedRequest = null
 
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --reporter apiary"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --reporter apiary"
 
         apiary = express()
         app = express()
@@ -293,7 +296,7 @@ describe "Command line interface", () ->
 
     describe "when using additional reporters with -r", () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -r nyan"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -r nyan"
 
         app = express()
 
@@ -318,7 +321,7 @@ describe "Command line interface", () ->
 
     describe 'when using an output path with -o', () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -r junit -o test_file_output.xml"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -r junit -o test_file_output.xml"
 
         app = express()
 
@@ -348,7 +351,7 @@ describe "Command line interface", () ->
       receivedRequest = {}
 
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -h Accept:application/json"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -h Accept:application/json"
 
         app = express()
 
@@ -376,7 +379,7 @@ describe "Command line interface", () ->
       receivedRequest = {}
 
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -u username:password"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -u username:password"
 
         app = express()
 
@@ -404,7 +407,7 @@ describe "Command line interface", () ->
 
     describe "when sorting requests with -s", () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/apiary.apib http://localhost:#{PORT} -s"
+        cmd = "#{binDredd} ./test/fixtures/apiary.apib http://localhost:#{PORT} -s"
 
         app = express()
 
@@ -428,7 +431,7 @@ describe "Command line interface", () ->
     describe 'when displaying errors inline with -e', () ->
 
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -e"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -e"
 
         app = express()
 
@@ -454,7 +457,7 @@ describe "Command line interface", () ->
 
     describe 'when showing details for all requests with -d', () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -d"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -d"
 
         app = express()
 
@@ -483,7 +486,7 @@ describe "Command line interface", () ->
         receivedRequest = {}
 
         before (done) ->
-          cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -m POST"
+          cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -m POST"
 
           app = express()
 
@@ -510,7 +513,7 @@ describe "Command line interface", () ->
         receivedRequest = {}
 
         before (done) ->
-          cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -m GET"
+          cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -m GET"
 
           app = express()
 
@@ -537,7 +540,7 @@ describe "Command line interface", () ->
       machineHit = false
       messageHit = false
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --path=./test/fixtures/multifile/*.apib --only=\"Message API > /message > GET\" --no-color"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --path=./test/fixtures/multifile/*.apib --only=\"Message API > /message > GET\" --no-color"
 
         app = express()
 
@@ -575,7 +578,7 @@ describe "Command line interface", () ->
 
     describe 'when suppressing color with --no-color', () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --no-color"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --no-color"
 
         app = express()
 
@@ -600,7 +603,7 @@ describe "Command line interface", () ->
 
     describe 'when suppressing color with --color false', () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --color false"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --color false"
 
         app = express()
 
@@ -625,7 +628,7 @@ describe "Command line interface", () ->
 
     describe 'when setting the log output level with -l', () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -l=error"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -l=error"
 
         app = express()
 
@@ -649,7 +652,7 @@ describe "Command line interface", () ->
 
     describe 'when showing timestamps with -t', () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} -t"
+        cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} -t"
 
         app = express()
 
@@ -676,7 +679,7 @@ describe "Command line interface", () ->
     receivedRequest = {}
 
     before (done) ->
-      cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --hookfiles=./test/fixtures/*_hooks.*"
+      cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --hookfiles=./test/fixtures/*_hooks.*"
 
       app = express()
 
@@ -708,7 +711,7 @@ describe "Command line interface", () ->
       return false
 
     before (done) ->
-      cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --hookfiles=./test/fixtures/*_events.*"
+      cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --hookfiles=./test/fixtures/*_events.*"
 
       app = express()
 
@@ -743,7 +746,7 @@ describe "Command line interface", () ->
       return ret.join(',')
 
     before (done) ->
-      cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --hookfiles=./test/fixtures/*_all.*"
+      cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --hookfiles=./test/fixtures/*_all.*"
 
       app = express()
 
@@ -771,7 +774,7 @@ describe "Command line interface", () ->
     describe "and server is responding in accordance with the schema", () ->
 
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/schema.apib http://localhost:#{PORT}"
+        cmd = "#{binDredd} ./test/fixtures/schema.apib http://localhost:#{PORT}"
 
         app = express()
 
@@ -796,7 +799,7 @@ describe "Command line interface", () ->
     describe "and server is NOT responding in accordance with the schema", () ->
 
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/schema.apib http://localhost:#{PORT}"
+        cmd = "#{binDredd} ./test/fixtures/schema.apib http://localhost:#{PORT}"
 
         app = express()
 
@@ -821,7 +824,7 @@ describe "Command line interface", () ->
   describe "when blueprint path is a glob", () ->
     describe "and called with --names options", () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/multifile/*.apib http://localhost --names"
+        cmd = "#{binDredd} ./test/fixtures/multifile/*.apib http://localhost --names"
         execCommand cmd, () ->
           done()
 
@@ -838,7 +841,7 @@ describe "Command line interface", () ->
       receivedRequests = []
 
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/multifile/*.apib http://localhost:#{PORT} --hookfiles=./test/fixtures/multifile/multifile_hooks.coffee"
+        cmd = "#{binDredd} ./test/fixtures/multifile/*.apib http://localhost:#{PORT} --hookfiles=./test/fixtures/multifile/multifile_hooks.coffee"
 
         app = express()
 
@@ -878,7 +881,7 @@ describe "Command line interface", () ->
   describe "when called with additional --path argument which is a glob", () ->
     describe "and called with --names options", () ->
       before (done) ->
-        cmd = "./bin/dredd ./test/fixtures/multiple-examples.apib http://localhost --path=./test/fixtures/multifile/*.apib --names --no-color"
+        cmd = "#{binDredd} ./test/fixtures/multiple-examples.apib http://localhost --path=./test/fixtures/multifile/*.apib --names --no-color"
         execCommand cmd, () ->
           done()
 
@@ -899,7 +902,7 @@ describe "Command line interface", () ->
     resourceRequested = false
 
     before (done) ->
-      cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --no-color --hookfiles=./test/fixtures/ruby-hooks/hooks-worker-client.coffee"
+      cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --no-color --hookfiles=./test/fixtures/ruby-hooks/hooks-worker-client.coffee"
 
       app = express()
 
@@ -931,7 +934,7 @@ describe "Command line interface", () ->
     resourceRequested = false
 
     before (done) ->
-      cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --no-color --sandbox --hookfiles=./test/fixtures/sandboxed-hook.js"
+      cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --no-color --sandbox --hookfiles=./test/fixtures/sandboxed-hook.js"
 
       app = express()
 
@@ -968,7 +971,7 @@ describe "Command line interface", () ->
     resourceRequested = false
 
     before (done) ->
-      cmd = "./bin/dredd ./test/fixtures/single-get.apib http://localhost:#{PORT} --server ./test/fixtures/scripts/dummy-server.sh --no-color"
+      cmd = "#{binDredd} ./test/fixtures/single-get.apib http://localhost:#{PORT} --server ./test/fixtures/scripts/dummy-server.sh --no-color"
 
       app = express()
 

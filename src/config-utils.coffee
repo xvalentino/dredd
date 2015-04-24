@@ -1,11 +1,12 @@
 fs = require 'fs'
 yaml = require 'js-yaml'
 clone = require 'clone'
+path = require 'path'
 
 configUtils = {}
 
 configUtils.save = (argsOrigin, path) ->
-  path ?= './dredd.yml'
+  path ?= path.normalize path.join __dirname, './dredd.yml'
 
   args = clone argsOrigin
 
@@ -23,7 +24,7 @@ configUtils.save = (argsOrigin, path) ->
 
 
 configUtils.load = (path) ->
-  path ?= './dredd.yml'
+  path ?= path.normalize path.join __dirname, './dredd.yml'
 
   yamlData = fs.readFileSync path
   data = yaml.safeLoad yamlData

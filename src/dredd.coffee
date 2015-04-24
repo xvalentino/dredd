@@ -147,7 +147,7 @@ class Dredd
     parseBlueprints = (cb) ->
       async.each Object.keys(config.data), (file, parseCallback) ->
         drafter = new Drafter
-        drafter.make config.data[file]['raw'], (drafterError, result) ->
+        drafter.make config.data[file]['raw'].replace(/\r\n/g, '\n').replace(/\r/g, '\n'), (drafterError, result) ->
           return parseCallback drafterError if drafterError
           config.data[file]['parsed'] = result
           parseCallback()

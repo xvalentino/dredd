@@ -9,7 +9,7 @@ Dredd = require './dredd'
 interactiveConfig = require './interactive-config'
 configUtils = require './config-utils'
 
-version = parsePackageJson path.join(__dirname, '../package.json')
+version = parsePackageJson path.normalize path.join(__dirname, '../package.json')
 
 class DreddCommand
   constructor: (options = {}, @cb) ->
@@ -130,7 +130,7 @@ class DreddCommand
       return @_processExit(0)
 
   loadDreddFile: () ->
-    if fs.existsSync './dredd.yml'
+    if fs.existsSync path.normalize(path.join __dirname, './dredd.yml')
       console.log 'Configuration dredd.yml found, ignoring other arguments.'
       @argv = configUtils.load()
 
