@@ -6,7 +6,7 @@ clone = require 'clone'
 bodyParser = require 'body-parser'
 fs = require 'fs'
 
-PORT = 3333
+PORT = 9988
 CMD_PREFIX = ''
 
 stderr = ''
@@ -15,6 +15,8 @@ exitStatus = null
 requests = []
 
 binDredd = 'node ' + path.normalize(path.join __dirname, '../../bin/dredd')
+
+noop = ->
 
 execCommand = (cmd, options = {}, callback) ->
   stderr = ''
@@ -26,17 +28,32 @@ execCommand = (cmd, options = {}, callback) ->
     options = {}
 
   options.cwd = path.normalize path.join __dirname, '../..'
+  options.maxBuffer = 1024*1024
 
-  cli = exec CMD_PREFIX + cmd, options, (error, out, err) ->
+  fromExec = false
+  fromClose = false
+
+  readyToCallback = ->
+    if fromExec and fromClose
+      fromExec = fromClose = false
+      readyToCallback = noop
+      callback(undefined, stdout, stderr, exitStatus)
+    return
+
+  cli = exec cmd, options, (error, out, err) ->
     stdout = out
     stderr = err
-
+    fromExec = true
     if error
       exitStatus = error.code
+    setTimeout readyToCallback, 0
+    return
 
   cli.on 'close', (code) ->
     exitStatus = code if exitStatus == null and code != undefined
-    callback(undefined, stdout, stderr, exitStatus)
+    fromClose = true
+    setTimeout readyToCallback, 0
+    return
 
 
 describe "Command line interface", () ->

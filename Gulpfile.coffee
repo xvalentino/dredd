@@ -21,11 +21,20 @@ gulp.task 'prepublish', ['build', 'lint']
 
 
 gulp.task 'test', ['build'], ->
-  code = 0
   gulp.src('test/**/*-test.coffee', read: false)
     .pipe mocha(
         compilers: 'coffee:coffee-script/register'
         timeout: 120000
         reporter: 'spec'
+      )
+
+gulp.task 'test-windows', ['build'], ->
+  gulp.src('test/**/*-test.coffee', read: false)
+    .pipe mocha(
+        compilers: 'coffee:coffee-script/register'
+        timeout: 120000
+        reporter: 'spec'
+        invert: true
+        grep: /(Using workaround for hooks in ruby)|(--server)/
       )
 
