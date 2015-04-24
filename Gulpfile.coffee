@@ -28,7 +28,7 @@ gulp.task 'test', ['build'], ->
         reporter: 'spec'
       )
 
-gulp.task 'test-windows', ['build'], ->
+gulp.task 'test-win', ['build'], ->
   gulp.src('test/**/*-test.coffee', read: false)
     .pipe mocha(
         compilers: 'coffee:coffee-script/register'

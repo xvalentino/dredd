@@ -13,6 +13,7 @@
     "lint": "gulp lint",
     "pretest": "gulp lint",
     "test": "gulp test",
+    "test-win": "gulp test-win",
     "coveralls": "scripts/coveralls",
     "prepublish": "gulp prepublish"
   },
