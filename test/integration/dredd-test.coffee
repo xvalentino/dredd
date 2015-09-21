@@ -165,7 +165,7 @@ describe "Dredd class Integration", () ->
         server2 = apiary.listen (PORT+1), ->
           console.log 'server apiary started'
 
-          # Comment out this timeout to enable race condition bug
+          # Uncomment this timeout to enable workaround for the race condition bug
           # setTimeout () ->
           #   console.log 'TIMEOUTED ACTION '
           # , 100
