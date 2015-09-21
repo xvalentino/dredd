@@ -107,7 +107,7 @@ describe "Dredd class Integration", () ->
         assert.equal exitStatus, 1
 
 
-  describe "when using reporter -r apiary in DREDD_REST_DEBUG mode with custom apiaryApiKey and apiaryApiName", () ->
+  describe.only "when using reporter -r apiary in DREDD_REST_DEBUG mode with custom apiaryApiKey and apiaryApiName", () ->
     server = null
     server2 = null
     receivedRequest = null
@@ -136,6 +136,9 @@ describe "Dredd class Integration", () ->
       apiary.use bodyParser.json(size:'5mb')
 
       apiary.post '/apis/*', (req, res) ->
+        console.log 'apiary api called'
+        console.log 'request headers', req.headers
+        console.log 'request body', req.body
         if req.body and req.url.indexOf('/tests/steps') > -1
           receivedRequest ?= clone(req.body)
           receivedHeaders[key.toLowerCase()] = val for key, val of req.headers
@@ -149,19 +152,31 @@ describe "Dredd class Integration", () ->
           reportUrl: 'http://url.me/test/run/1234_id'
 
       apiary.all '*', (req, res) ->
+        console.log 'apiary all called'
         res.type 'json'
         res.send {}
 
       app.get '/machines', (req, res) ->
+        console.log 'sut api called'
         res.type('json').status(200).send [type: 'bulldozer', name: 'willy']
 
       server = app.listen PORT, () ->
+        console.log 'server app started'
         server2 = apiary.listen (PORT+1), ->
-          execCommand cmd, () ->
-            server2.close ->
-              server.close ->
+          console.log 'server apiary started'
 
-      server.on 'close', done
+          # Comment out this timeout to enable race condition bug
+          # setTimeout () ->
+          #   console.log 'TIMEOUTED ACTION '
+          # , 100
+
+          execCommand cmd, () ->
+            console.log 'command executed'
+            server2.close ->
+              console.log 'server 2 closed'
+              server.close () ->
+                console.log 'server 1 cloesd'
+                done()
 
     it 'should not print warning about missing APIARY_API_KEY and APIARY_API_NAME', () ->
       assert.notInclude stderr, 'Apiary reporter environment variable APIARY_API_KEY or APIARY_API_NAME not defined.'
@@ -185,7 +200,6 @@ describe "Dredd class Integration", () ->
       assert.deepProperty receivedRequest, 'resultData.result.body.validator'
       assert.deepProperty receivedRequest, 'resultData.result.headers.validator'
       assert.deepProperty receivedRequest, 'resultData.result.statusCode.validator'
-
 
       it 'prints out an error message', ->
         assert.notEqual exitStatus, 0
