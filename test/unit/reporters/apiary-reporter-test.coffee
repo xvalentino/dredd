@@ -152,7 +152,7 @@ describe 'ApiaryReporter', () ->
       done()
 
     describe "_performRequestAsync", () ->
-      describe 'when server is not available', () ->
+      describe.only 'when server is not available', () ->
         beforeEach () ->
           nock.enableNetConnect()
           nock.cleanAll()

@@ -204,6 +204,7 @@ class ApiaryReporter
         buffer = buffer + chunk
 
       res.on 'error', (error) =>
+        console.log 'response error'
         if @verbose
           logger.log 'REST Reporter HTTPS Response error.'
         return callback error, req, res
@@ -250,28 +251,29 @@ class ApiaryReporter
         options: options
         body: body
       logger.log 'Rest Reporter Request:', JSON.stringify(info, null, 2)
+    console.log 'handler'
 
     handleReqError = (error) =>
       @serverError = true
+      console.log 'error handed'
       if CONNECTION_ERRORS.indexOf(error.code) > -1
         return callback "Apiary reporter: Error connecting to Apiary test reporting API."
       else
         return callback error, req, null
 
+    if @verbose
+      logger.log 'Starting REST Reporter Request'
+
     if @configuration.apiUrl?.indexOf('https') is 0
-      if @verbose
-        logger.log 'Starting REST Reporter HTTPS Request'
+      console.log @configuration.apiUrl
+      console.log 'https'
+      console.log options
       req = https.request options, handleResponse
-
-      req.on 'error', handleReqError
-
     else
-      if @verbose
-        logger.log 'Starting REST Reporter HTTP Response'
+      console.log 'http'
       req = http.request options, handleResponse
 
-      req.on 'error', handleReqError
-
+    req.on 'error', handleReqError
     req.write postData
     req.end()
 
