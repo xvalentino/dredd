@@ -273,6 +273,7 @@ class ApiaryReporter
       req = http.request options, handleResponse
 
     req.on 'error', handleReqError
+    console.log req
     req.write postData
     req.end()
 
