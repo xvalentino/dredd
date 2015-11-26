@@ -267,9 +267,12 @@ class ApiaryReporter
 
     if @configuration.apiUrl?.indexOf('https') is 0
       console.log 'https'
+      options.rejectUnauthorized = false
+      console.log options
       req = https.request options, handleResponse
     else
       console.log 'http'
+      console.log options
       req = http.request options, handleResponse
 
     req.on 'error', handleReqError
