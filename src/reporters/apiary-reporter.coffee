@@ -255,7 +255,8 @@ class ApiaryReporter
 
     handleReqError = (error) =>
       @serverError = true
-      console.log 'error handed'
+      console.log 'error handled'
+      console.log CONNECTION_ERRORS.indexOf(error.code)
       if CONNECTION_ERRORS.indexOf(error.code) > -1
         return callback "Apiary reporter: Error connecting to Apiary test reporting API."
       else
@@ -265,9 +266,7 @@ class ApiaryReporter
       logger.log 'Starting REST Reporter Request'
 
     if @configuration.apiUrl?.indexOf('https') is 0
-      console.log @configuration.apiUrl
       console.log 'https'
-      console.log options
       req = https.request options, handleResponse
     else
       console.log 'http'
