@@ -268,7 +268,7 @@ class ApiaryReporter
     if @configuration.apiUrl?.indexOf('https') is 0
       console.log 'https'
       options.rejectUnauthorized = false
-      options.agent = new https.Agent( options );
+      options.agent = new https.Agent( options )
       console.log options
       req = https.request options, handleResponse
     else
