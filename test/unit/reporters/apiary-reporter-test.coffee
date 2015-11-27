@@ -152,11 +152,12 @@ describe 'ApiaryReporter', () ->
       done()
 
     describe.only "performAsync", () ->
-      describe "_performRequestAsync over https", () ->
+      describe "_performRequestAsync over http", () ->
         describe 'when server is not available', () ->
           beforeEach () ->
             nock.enableNetConnect()
             nock.cleanAll()
+            env['APIARY_API_URL'] = "http://localhost:#{PORT}"
 
           it 'should log human readable message', (done) ->
             emitter = new EventEmitter
@@ -172,12 +173,11 @@ describe 'ApiaryReporter', () ->
               assert.isTrue apiaryReporter.serverError
               done()
 
-      describe "_performRequestAsync over http", () ->
+      describe "_performRequestAsync over https", () ->
         describe 'when server is not available', () ->
           beforeEach () ->
             nock.enableNetConnect()
             nock.cleanAll()
-            env['APIARY_API_URL'] = "http://localhost:#{PORT}"
 
           it 'should log human readable message', (done) ->
             emitter = new EventEmitter
