@@ -266,16 +266,15 @@ class ApiaryReporter
 
     if @configuration.apiUrl?.indexOf('https') is 0
       console.log 'https'
-      req = https.request options, handleResponse
+      reqs = https.request options, handleResponse
+      reqs.on 'error', handleReqError
+      reqs.write postData
+      reqs.end()
     else
       console.log 'http'
       req = http.request options, handleResponse
-
-    try
       req.on 'error', handleReqError
       req.write postData
       req.end()
-    catch e
-      handleReqError e
 
 module.exports = ApiaryReporter
