@@ -242,9 +242,6 @@ class ApiaryReporter
         'User-Agent': "Dredd REST Reporter/" + packageConfig['version'] + " (" + system + ")"
         'Content-Type': 'application/json'
         'Content-Length': Buffer.byteLength(postData, 'utf8')
-      rejectUnauthorized: false
-
-    options.agent = new https.Agent(options)
 
     unless @configuration['apiToken'] == null
       options.headers['Authentication'] = 'Token ' + @configuration['apiToken']
@@ -259,7 +256,6 @@ class ApiaryReporter
     handleReqError = (error) =>
       @serverError = true
       console.log 'error handled'
-      console.log CONNECTION_ERRORS.indexOf(error.code)
       if CONNECTION_ERRORS.indexOf(error.code) > -1
         return callback "Apiary reporter: Error connecting to Apiary test reporting API."
       else
@@ -270,18 +266,16 @@ class ApiaryReporter
 
     if @configuration.apiUrl?.indexOf('https') is 0
       console.log 'https'
-#      options.rejectUnauthorized = false
-#      options.agent = new https.Agent( options )
-      console.log options
       req = https.request options, handleResponse
     else
       console.log 'http'
-      console.log options
       req = http.request options, handleResponse
 
-    req.on 'error', handleReqError
-    console.log req._events["error"].toString()
-    req.write postData
-    req.end()
+    try
+      req.on 'error', handleReqError
+      req.write postData
+      req.end()
+    catch e
+      handleReqError e
 
 module.exports = ApiaryReporter
