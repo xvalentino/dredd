@@ -242,6 +242,9 @@ class ApiaryReporter
         'User-Agent': "Dredd REST Reporter/" + packageConfig['version'] + " (" + system + ")"
         'Content-Type': 'application/json'
         'Content-Length': Buffer.byteLength(postData, 'utf8')
+      rejectUnauthorized: false
+
+    options.agent = new https.Agent(options)
 
     unless @configuration['apiToken'] == null
       options.headers['Authentication'] = 'Token ' + @configuration['apiToken']
@@ -267,8 +270,8 @@ class ApiaryReporter
 
     if @configuration.apiUrl?.indexOf('https') is 0
       console.log 'https'
-      options.rejectUnauthorized = false
-      options.agent = new https.Agent( options )
+#      options.rejectUnauthorized = false
+#      options.agent = new https.Agent( options )
       console.log options
       req = https.request options, handleResponse
     else
