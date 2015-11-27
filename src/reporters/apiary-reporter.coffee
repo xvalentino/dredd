@@ -268,6 +268,7 @@ class ApiaryReporter
     if @configuration.apiUrl?.indexOf('https') is 0
       console.log 'https'
       options.rejectUnauthorized = false
+      options.agent = new https.Agent( options );
       console.log options
       req = https.request options, handleResponse
     else
@@ -276,7 +277,7 @@ class ApiaryReporter
       req = http.request options, handleResponse
 
     req.on 'error', handleReqError
-    console.log req
+    console.log req._events["error"].toString()
     req.write postData
     req.end()
 
