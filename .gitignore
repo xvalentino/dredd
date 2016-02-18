@@ -1,0 +1,6 @@
+.idea/
+.bundle/
+vendor/
+tmp
+examples/laravel/vendor/
+.phpcomplete_extended/
