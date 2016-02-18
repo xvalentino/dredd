@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+
+use Dredd\Server;
+use Dredd\Hooks;
+
+ini_set('implicit_flush', 'on');
+ini_set('output_buffering', 'off');
+
+$autoloadPath = (in_array("vendor/bin/dredd-hooks-php", $argv) || in_array("bin/dredd-hooks-php", $argv)) ? __DIR__ . "/../../../autoload.php" : __DIR__ . "/../vendor/autoload.php";
+
+require $autoloadPath;
+
+Hooks::loadHooks($argv);
+
+$server = new Server();
+
+fprintf(STDOUT, "Starting server\n");
+flush();
+
+$server->run();
