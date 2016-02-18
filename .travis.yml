@@ -1,6 +1,6 @@
 language: php
 before_install:
-  - npm install -g dredd
+  - npm link --python=python2 ./__dredd__
   - bundle install
   - composer install
 
