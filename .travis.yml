@@ -1,7 +1,7 @@
 language: python
 before_install:
   - node --version
-  - npm install --python=python2 -g dredd
+  - npm link --python=python2 ./__dredd__
   - bundle install
 
 python:
