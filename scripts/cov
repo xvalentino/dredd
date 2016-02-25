@@ -5,21 +5,32 @@
 # Example:
 # ./scripts/cov html-cov > cov.html
 
-rm -rf ./src-cov
-
 COV=./node_modules/coffee-coverage/bin/coffeecoverage
 MOCHA=./node_modules/.bin/mocha
 
 REPORTER=$1
 echo "Using Mocha reporter: $REPORTER" 1>&2
-$COV --exclude node_modules,.git,test --path relative . ./src-cov 1>&2
-cp -r ./test ./src-cov/test
-cp ./package.json ./src-cov
 
+# Cleanup
+rm -rf ./src-cov
+
+# Creating directory with instrumented JS code
+$COV --exclude node_modules,.git,test --path=relative . ./src-cov 1>&2
+cp ./package.json ./src-cov
+cp -r ./test ./src-cov/test
+cp -r ./bin ./src-cov/bin
+
+# Replacing 'lib' with 'src' in require path in ./bin/dredd
+sed -e 's/\/lib\/dredd-command/\/src\/dredd-command/g' ./src-cov/bin/dredd > ./src-cov/bin/dredd.tmp
+mv ./src-cov/bin/dredd.tmp ./src-cov/bin/dredd
+chmod +x ./src-cov/bin/dredd
+
+# Testing
 find ./src-cov/test/ -name '*-test.coffee' | xargs "$MOCHA" \
-  --compilers 'coffee:coffee-script/register' \
-  --reporter "$REPORTER" \
-  --timeout 120000 \
+  --compilers='coffee:coffee-script/register' \
+  --reporter="$REPORTER" \
+  --timeout=120000 \
   --recursive
 
+# Cleanup
 rm -rf ./src-cov
