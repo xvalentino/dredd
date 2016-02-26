@@ -8,9 +8,6 @@ generateUuid = require('node-uuid').v4
 logger = require './logger'
 which = require './which'
 
-
-HOOK_TIMEOUT = 5000
-
 CONNECT_TIMEOUT = 1500
 CONNECT_RETRY = 500
 AFTER_CONNECT_WAIT = 100
@@ -24,7 +21,7 @@ HANDLER_MESSAGE_DELIMITER = "\n"
 
 
 class HooksWorkerClient
-  constructor: (@runner) ->
+  constructor: (@runner, @timeout) ->
     @language = @runner.hooks?.configuration?.options?.language
     @clientConnected = false
     @handlerEnded = false
@@ -295,7 +292,8 @@ class HooksWorkerClient
           hookCallback()
 
         # set timeout for the hook
-        timeout = setTimeout handleTimeout, HOOK_TIMEOUT
+        timeout = setTimeout handleTimeout, @timeout
+
 
         @emitter.on uuid, messageHandler
 

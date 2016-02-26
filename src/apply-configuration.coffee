@@ -44,6 +44,7 @@ applyConfiguration = (config) ->
       hookfiles: null
       sandbox: false
       language: 'nodejs'
+      'hook-timeout': 5000
 
   # normalize options and config
   for own key, value of config

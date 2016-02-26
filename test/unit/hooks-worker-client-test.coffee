@@ -28,7 +28,7 @@ TransactionRunner = require '../../src/transaction-runner'
 hooksWorkerClient = null
 
 loadWorkerClient = (callback) ->
-  hooksWorkerClient = new HooksWorkerClient(runner)
+  hooksWorkerClient = new HooksWorkerClient(runner, 5000)
   hooksWorkerClient.start (error) ->
     callback(error)
 
