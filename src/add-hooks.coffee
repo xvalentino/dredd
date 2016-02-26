@@ -130,7 +130,8 @@ addHooks = (runner, transactions, callback) ->
       # Worker client will start the worker server and pass the "hookfiles" options as CLI arguments to it
       else
         # start hooks worker
-        hooksWorkerClient = new HooksWorkerClient(runner)
+        hookTimeout = runner?.configuration?.options?['hook-timeout'] || 5000
+        hooksWorkerClient = new HooksWorkerClient(runner, hookTimeout)
         hooksWorkerClient.start callback
 
     # Loading files in sandboxed mode
