@@ -131,4 +131,8 @@ options =
   version:
     description: "Show version number.\n"
 
+  'hook-worker-timeout':
+    description: "How long to wait for worker until it is considered timed out"
+    default: 5000
+
 module.exports = options

@@ -10,7 +10,7 @@ console = require 'console'
 
 which = require './which'
 
-HOOK_TIMEOUT = 5000
+HOOK_TIMEOUT = hooks?.configuration?.options?['hook-worker-timeout'] || 5000
 HANDLER_HOST = 'localhost'
 HANDLER_PORT = 61321
 HANDLER_MESSAGE_DELIMITER = "\n"
